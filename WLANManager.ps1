@@ -7,7 +7,7 @@
 3bd70a15-a02e-491f-b117-0bbabf89fc4f
 
 .VERSION
-2018-09-24
+2021-02-08
 
 .AUTHOR 
 johan.carlsson@innovatum.se
@@ -18,7 +18,15 @@ http://www.innovatum.se/personer/johan-carlsson
 Updated by JENS CHRISTENS
 jens.christens@live.com
 
+08/02/2021
+Updated by NAYEF ALEBRAHIM
+nayef.github@alebrah.im
+
 .CHANGELOG
+February 2021
+- Fixed code due to changes in Powershell
+- Ignore Hyper-V, Wireguard, Wintun, TAP Adapters
+
 September 2018
 - Fixed the Win10 error when first installing SchTask. (No MSFT_ScheduledTask objects found with property 'TaskName' equal to 'WLANManager') 
 
@@ -139,7 +147,7 @@ If ((Get-Module PSModule-WLANManager) -ne $null)
     }
 
 ## Import PowerShell Module
-$strBasePath = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$strBasePath = Get-Location
 Import-Module "$strBasePath\PSModule-WLANManager.psm1" -Verbose
 
 
@@ -147,7 +155,7 @@ Import-Module "$strBasePath\PSModule-WLANManager.psm1" -Verbose
 ## Install or Remove 
 
 ## Version
-$Global:Version = "2015-05-07"
+$Global:Version = "2021-02-08"
 
 ## Set correct Destination and VersionRegPath
 If ($Install -eq "System" -and $BalloonTip -eq $true)

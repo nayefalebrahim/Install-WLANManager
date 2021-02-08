@@ -90,8 +90,7 @@ ElseIf ($NetworkConnectionsLAN -ne $null)
 function Test-WirelessConnection
 {
 ## Get only wireless connections with IP-address
-$NetworkConnectionsWLAN = Get-WmiObject -Class Win32_NetworkAdapterConfiguration -Filter "IPEnabled=TRUE" | Where-Object {($_.Description -notlike "*VirtualBox*") -and ($_.Description -notlike "*VMware*") -or ($_.Description -like "*Wireless*") -or ($_.Description -like "*Wi-Fi*")}
-                            Get-WmiObject -Class Win32_NetworkAdapterConfiguration -Filter "IPEnabled=TRUE" | Where-Object {($_.Description -notlike "*VirtualBox*") -and ($_.Description -notlike "*VMware*") -and ($_.Description -notlike "*Hyper*") -and ($_.Description -notlike "*TAP*") -and ($_.Description -notlike "*Wireguard*") -and ($_.Description -notlike "*Wintun*") -or ($_.Description -like "*Wireless*") -or ($_.Description -like "*Wi-Fi*")}
+$NetworkConnectionsWLAN = Get-WmiObject -Class Win32_NetworkAdapterConfiguration -Filter "IPEnabled=TRUE" | Where-Object {($_.Description -notlike "*VirtualBox*") -and ($_.Description -notlike "*VMware*") -and ($_.Description -notlike "*Hyper*") -and ($_.Description -notlike "*TAP*") -and ($_.Description -notlike "*Wireguard*") -and ($_.Description -notlike "*Wintun*") -or ($_.Description -like "*Wireless*") -or ($_.Description -like "*Wi-Fi*")}
 
 If ($NetworkConnectionsWLAN -eq $null)
     {
@@ -236,7 +235,7 @@ Write-Output "VersionRegPath: $VersionRegPath"
                     {
                     Write-Output "Missing"
                     Write-Output "Installing WLAN Manager Scheduled Task... " 
-                    New-STask -TaskName "$TaskName" -TaskCommand "C:\Windows\System32\WindowsPowerShell\v1.0\PowerShell.exe" -TaskArguments "-WindowStyle Hidden -NonInteractive -Executionpolicy Unrestricted -Command ""& """"$DestinationPath\WLANManager.ps1"""""" -ReleaseDHCPLease:`$$ReleaseDHCPLease -BalloonTip:`$$BalloonTip""" -TaskRunAt $TaskRunAt -TaskRunAs $TaskRunAs -TaskRunLevel $TaskRunLevel| Out-Null
+                    New-STask -TaskName "$TaskName" -TaskDescription "WLAN Manager" -TaskCommand "C:\Windows\System32\WindowsPowerShell\v1.0\PowerShell.exe" -TaskArguments "-WindowStyle Hidden -NonInteractive -Executionpolicy Unrestricted -Command " + $DestinationPath + "\WLANManager.ps1 -ReleaseDHCPLease: $ReleaseDHCPLease -BalloonTip: $BalloonTip" -TaskRunAt "$TaskRunAt" -TaskRunAs "$TaskRunAs" -TaskRunLevel "$TaskRunLevel" | Out-Null
                     #New-STask -TaskName "$TaskName" -TaskCommand "C:\Windows\System32\WindowsPowerShell\v1.0\PowerShell.exe" -TaskScript "$DestinationPath\WLANManager.ps1" -TaskArguments "-WindowStyle Hidden -NonInteractive -Executionpolicy unrestricted -file ""$DestinationPath\WLANManager.ps1 -BalloonTip:`$$BalloonTip""" | Out-Null
                     Start-STask -TaskName "$TaskName" | Out-Null
                     Write-Output "Done"
@@ -247,7 +246,7 @@ Write-Output "VersionRegPath: $VersionRegPath"
 
 
 ## Function: Remove-WLANManager
-
+    }
 function Remove-WLANManager
 {
 [CmdletBinding()]
